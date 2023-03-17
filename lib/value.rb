@@ -37,10 +37,8 @@ class Value
 
     private
 
-    def to_v(other)
-        other.is_a?(Value) ? other : Value.new(other)
-    end
-
+    def to_v(other) = other.is_a?(Value) ? other : Value.new(other)
+        
 end
 
 a = Value.new(-4)
