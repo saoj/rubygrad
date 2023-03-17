@@ -35,6 +35,16 @@ class Value
         return out
     end
 
+    def **(other)
+        out = Value.new(self.value ** other, "**#{other}", [self])
+
+        backward = lambda do
+            self.grad += (other * self.value ** (other - 1)) * out.grad
+        end
+
+        return out
+    end
+
     def to_s
         value.to_s
     end
@@ -47,13 +57,14 @@ class Value
 
 end
 
-a = Value.new(-4)
+a = Value.new(-5)
 b = Value.new(2)
 c = a + b
 d = a * b
+e = a ** 2
 puts c.value
 puts d.value
+puts e.value
 
 puts c
 puts c.inspect
-c.blah
