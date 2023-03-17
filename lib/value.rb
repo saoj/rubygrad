@@ -43,11 +43,8 @@ class Value
         "Value(value=#{value}, grad=#{grad})"
     end
 
+    private def to_v(other) = other.is_a?(Value) ? other : Value.new(other)
 
-    private
-
-    def to_v(other) = other.is_a?(Value) ? other : Value.new(other)
-        
 end
 
 a = Value.new(-4)
@@ -59,3 +56,4 @@ puts d.value
 
 puts c
 puts c.inspect
+c.blah
