@@ -19,12 +19,20 @@ class MyValue
         out = MyValue.new(self.value * other.value)
     end
 
+    def **(other)
+        out = MyValue.new(self.value ** other)
+    end
+
     def -@
         self * -1
     end
 
     def -(other) 
         self + (-other)
+    end
+
+    def /(other)
+        self * (other ** -1)
     end
 
     def coerce(other)
@@ -38,19 +46,34 @@ class MyValue
 
 end
 
-a = MyValue.new(4) # a MyValue
-b = MyValue.new(2) # a MyValue
-c = 2 # an Integer 
+a = MyValue.new(4.0) # a MyValue
+b = MyValue.new(2.0) # a MyValue
+c = 2.0 # an Integer 
 
 res = a - b
-puts "#{res} is #{res.class}" # => 2 is MyValue
+puts "#{res} is #{res.class}" # => 2.0 is MyValue
 
 res = b - a
-puts "#{res} is #{res.class}" # => -2 is MyValue
+puts "#{res} is #{res.class}" # => -2.0 is MyValue
 
 res = a - c
-puts "#{res} is #{res.class}" # => 2 is MyValue
+puts "#{res} is #{res.class}" # => 2.0 is MyValue
 
 res = c - a
-puts "#{res} is #{res.class}" # => -2 is MyValue
+puts "#{res} is #{res.class}" # => -2.0 is MyValue
+
+puts
+
+res = a / b
+puts "#{res} is #{res.class}" # => 2.0 is MyValue
+
+res = b / a
+puts "#{res} is #{res.class}" # => 0.5 is MyValue
+
+res = a / c
+puts "#{res} is #{res.class}" # => 2.0 is MyValue
+
+res = c / a
+puts "#{res} is #{res.class}" # => 0.5 is MyValue
+
 
