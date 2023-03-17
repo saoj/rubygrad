@@ -12,7 +12,7 @@ class Value
     attr_reader :value, :grad, :backward, :op
 
     def +(other)
-        other = Value.new(other) if !other.is_a?(Value)
+        other = to_v(other)
         out = Value.new(self.value + other.value, '+', [self, other])
 
         backward = lambda do
@@ -23,9 +23,29 @@ class Value
         return out
     end
 
+    def *(other)
+        other = to_v(other)
+        out = Value.new(self.value * other.value, '*', [self, other])
+
+        backward = lambda do
+            self.grad += other.data * out.grad
+            other.grad += self.data * out.grad
+        end
+
+        return out
+    end
+
+    private
+
+    def to_v(other)
+        other.is_a?(Value) ? other : Value.new(other)
+    end
+
 end
 
 a = Value.new(-4)
 b = Value.new(2)
 c = a + b
+d = a * b
 puts c.value
+puts d.value
