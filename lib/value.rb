@@ -28,12 +28,21 @@ class Value
         out = Value.new(self.value * other.value, '*', [self, other])
 
         backward = lambda do
-            self.grad += other.data * out.grad
-            other.grad += self.data * out.grad
+            self.grad += other.value * out.grad
+            other.grad += self.value * out.grad
         end
 
         return out
     end
+
+    def to_s
+        value.to_s
+    end
+
+    def inspect
+        "Value(value=#{value}, grad=#{grad})"
+    end
+
 
     private
 
@@ -47,3 +56,6 @@ c = a + b
 d = a * b
 puts c.value
 puts d.value
+
+puts c
+puts c.inspect
