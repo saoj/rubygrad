@@ -45,6 +45,23 @@ class Value
         return out
     end
 
+    def -@()
+        self * -1
+    end
+
+    def -(other)
+        self + (-other)
+    end
+
+    def /(other)
+        self * (other ** -1)
+    end
+
+    def coerce(other)
+        other = to_v(other)
+        [other, self.value]
+    end
+
     def to_s
         value.to_s
     end
@@ -57,14 +74,3 @@ class Value
 
 end
 
-a = Value.new(-5)
-b = Value.new(2)
-c = a + b
-d = a * b
-e = a ** 2
-puts c.value
-puts d.value
-puts e.value
-
-puts c
-puts c.inspect
