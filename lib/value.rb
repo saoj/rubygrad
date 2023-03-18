@@ -6,7 +6,7 @@ class Value
         @op = op
         @grad = 0
         @prev = prev.uniq.freeze
-        @calc_gradient = nil
+        @calc_gradient = lambda { }
     end
 
     attr_reader :value, :grad, :op
