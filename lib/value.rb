@@ -6,16 +6,16 @@ class Value
         @op = op
         @grad = 0
         @prev = prev.uniq.freeze
-        @backward = nil
+        @calc_gradient = nil
     end
 
-    attr_reader :value, :grad, :backward, :op
+    attr_reader :value, :grad, :op
 
     def +(other)
         other = to_v(other)
         out = Value.new(self.value + other.value, '+', [self, other])
 
-        backward = lambda do
+        out.calc_gradient = lambda do
             self.grad += out.grad
             other.grade += out.grad
         end
@@ -27,7 +27,7 @@ class Value
         other = to_v(other)
         out = Value.new(self.value * other.value, '*', [self, other])
 
-        backward = lambda do
+        out.calc_gradient = lambda do
             self.grad += other.value * out.grad
             other.grad += self.value * out.grad
         end
@@ -38,7 +38,7 @@ class Value
     def **(other)
         out = Value.new(self.value ** other, "**#{other}", [self])
 
-        backward = lambda do
+        out.calc_gradient = lambda do
             self.grad += (other * self.value ** (other - 1)) * out.grad
         end
 
@@ -73,4 +73,3 @@ class Value
     private def to_v(other) = other.is_a?(Value) ? other : Value.new(other)
 
 end
-
