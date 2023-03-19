@@ -47,8 +47,7 @@ class Value
     end
 
     def tanh
-        x = self.value
-        t = (Math.exp(2*x) - 1) / (Math.exp(2*x) + 1)
+        t = (Math.exp(2 * self.value) - 1) / (Math.exp(2 * self.value) + 1)
         out = Value.new(t, 'tanh', [self])
 
         out.calc_gradient = lambda do
