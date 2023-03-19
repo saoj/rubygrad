@@ -1,3 +1,4 @@
+require 'set'
 
 class Value
 
@@ -9,8 +10,8 @@ class Value
         @calc_gradient = lambda { }
     end
 
-    attr_reader :value, :grad, :op
-    attr_writer :calc_gradient
+    attr_reader :value, :grad, :op, :prev, :calc_gradient
+    attr_writer :calc_gradient, :grad
 
     def +(other)
         other = to_v(other)
@@ -74,6 +75,30 @@ class Value
         [other, self.value]
     end
 
+    def build_topo_graph(start)
+        topo = []
+        visited = Set.new
+        build_topo = lambda do |v|
+            if !visited.include?(v)
+                visited.add(v)
+                v.prev.each do |child|
+                    build_topo.call(child)
+                end
+                topo.append(v)
+            end
+        end
+        build_topo.call(start)
+        return topo
+    end
+
+    def backward
+        topo = build_topo_graph(self)
+        self.grad = 1.0
+        topo.reverse_each do |node|
+            node.calc_gradient.call
+        end
+    end
+
     def to_s
         value.to_s
     end
@@ -85,6 +110,3 @@ class Value
     private def to_v(other) = other.is_a?(Value) ? other : Value.new(other)
 
 end
-
-a = Value.new(1.0)
-puts -a
