@@ -10,6 +10,7 @@ class Value
     end
 
     attr_reader :value, :grad, :op
+    attr_writer :calc_gradient
 
     def +(other)
         other = to_v(other)
@@ -45,7 +46,7 @@ class Value
         return out
     end
 
-    def -@()
+    def -@
         self * -1
     end
 
@@ -73,3 +74,6 @@ class Value
     private def to_v(other) = other.is_a?(Value) ? other : Value.new(other)
 
 end
+
+a = Value.new(1.0)
+puts -a
