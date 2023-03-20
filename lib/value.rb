@@ -62,7 +62,7 @@ class Value
         out = Value.new(Math.exp(self.value), 'exp', [self])
 
         out.calc_gradient = lambda do
-            self.grad += out.data * out.grad
+            self.grad += out.value * out.grad
         end
 
         return out
