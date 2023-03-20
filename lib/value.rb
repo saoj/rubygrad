@@ -19,7 +19,7 @@ class Value
 
         out.calc_gradient = lambda do
             self.grad += out.grad
-            other.grade += out.grad
+            other.grad += out.grad
         end
 
         return out
@@ -110,3 +110,23 @@ class Value
     private def to_v(other) = other.is_a?(Value) ? other : Value.new(other)
 
 end
+
+
+=begin
+x1 = Value.new(2.0)
+x2 = Value.new(0.0)
+w1 = Value.new(-3.0)
+w2 = Value.new(1.0)
+b = Value.new(6.881373587)
+x1w1 = x1 * w1
+x2w2 = x2 * w2
+x1w1x2w2 = x1w1 + x2w2
+n = x1w1x2w2 + b
+o = n.tanh
+o.backward
+
+puts x1.inspect,x2.inspect,w1.inspect,w2.inspect
+
+=end
+
+
