@@ -58,6 +58,16 @@ class Value
         return out
     end
 
+    def exp 
+        out = Value.new(Math.exp(self.value), 'exp', [self])
+
+        out.calc_gradient = lambda do
+            self.grad += out.data * out.grad
+        end
+
+        return out
+    end
+
     def -@
         self * -1
     end
