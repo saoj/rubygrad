@@ -58,6 +58,17 @@ class Value
         return out
     end
 
+    def relu
+        n = self.value < 0 ? 0 : self.value
+        out = Value.new(n, 'ReLU', [self])
+
+        out.calc_gradient = lambda do
+            self.grad += (out.value > 0 ? 1 : 0) * out.grad
+        end
+
+        return out
+    end
+
     def exp 
         out = Value.new(Math.exp(self.value), 'exp', [self])
 
