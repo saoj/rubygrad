@@ -88,7 +88,7 @@ class MLP
         @layers_config = layers_config
     end
 
-    attr_reader :number_of_layers, :layers
+    attr_reader :layers
 
     def inspect
         "MLP(#{@layers_config.join(", ")})"

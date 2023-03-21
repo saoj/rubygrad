@@ -33,7 +33,7 @@ _loss_format = "%.#{_loss_precision}f"
     # improve neural net (update weights and biases)
     nn.parameters.each { |p| p.value -= learning_rate * p.grad }
 
-    puts "Pass #{_passes_format % (pass + 1)} => Learning rate: #{"%.10f" % learning_rate} => Loss: #{_loss_format % loss.value}" if (pass + 1) % 20 == 0 or pass == 0
+    puts "Pass #{_passes_format % (pass + 1)} => Learning rate: #{"%.10f" % learning_rate} => Loss: #{_loss_format % loss.value}" if (pass + 1) % 100 == 0 or pass == 0
 
     break if loss.value == 0 # just for fun and just in case
 end

@@ -2,20 +2,19 @@ require 'set'
 
 class Value
 
-    def initialize(value, op = '', prev = [])
+    def initialize(value, prev = [])
         @value = value
-        @op = op
         @grad = 0
         @prev = prev.uniq.freeze
         @calc_gradient = lambda { }
     end
 
-    attr_reader :value, :grad, :op, :prev, :calc_gradient
+    attr_reader :value, :grad, :prev, :calc_gradient
     attr_writer :calc_gradient, :grad, :value
 
     def +(other)
         other = to_v(other)
-        out = Value.new(self.value + other.value, '+', [self, other])
+        out = Value.new(self.value + other.value, [self, other])
 
         out.calc_gradient = lambda do
             self.grad += out.grad
@@ -27,7 +26,7 @@ class Value
 
     def *(other)
         other = to_v(other)
-        out = Value.new(self.value * other.value, '*', [self, other])
+        out = Value.new(self.value * other.value, [self, other])
 
         out.calc_gradient = lambda do
             self.grad += other.value * out.grad
@@ -38,7 +37,7 @@ class Value
     end
 
     def **(other)
-        out = Value.new(self.value ** other, "**#{other}", [self])
+        out = Value.new(self.value ** other, [self])
 
         out.calc_gradient = lambda do
             self.grad += (other * self.value ** (other - 1)) * out.grad
@@ -49,7 +48,7 @@ class Value
 
     def tanh
         t = (Math.exp(2.0 * self.value) - 1.0) / (Math.exp(2.0 * self.value) + 1.0)
-        out = Value.new(t, 'tanh', [self])
+        out = Value.new(t, [self])
 
         out.calc_gradient = lambda do
             self.grad += (1.0 - t ** 2.0) * out.grad
@@ -61,7 +60,7 @@ class Value
     def sigmoid
         e = Math.exp(-1.0 * self.value)
         t = 1.0 / (1.0 + e)
-        out = Value.new(t, 'sigmoid', [self])
+        out = Value.new(t, [self])
         
         out.calc_gradient = lambda do
             self.grad += t * (1.0 - t) * out.grad
@@ -72,7 +71,7 @@ class Value
 
     def relu
         n = self.value < 0 ? 0.0 : self.value
-        out = Value.new(n, 'ReLU', [self])
+        out = Value.new(n, [self])
 
         out.calc_gradient = lambda do
             self.grad += (out.value > 0 ? 1.0 : 0.0) * out.grad
@@ -82,7 +81,7 @@ class Value
     end
 
     def exp 
-        out = Value.new(Math.exp(self.value), 'exp', [self])
+        out = Value.new(Math.exp(self.value), [self])
 
         out.calc_gradient = lambda do
             self.grad += out.value * out.grad
