@@ -11,7 +11,7 @@ class Value
     end
 
     attr_reader :value, :grad, :op, :prev, :calc_gradient
-    attr_writer :calc_gradient, :grad
+    attr_writer :calc_gradient, :grad, :value
 
     def +(other)
         other = to_v(other)
