@@ -2,7 +2,7 @@ require_relative 'lib/nn.rb'
 
 nn = MLP.new(3, 4, 4, 1)
 
-nn.show_params
+nn.show_params(in_words = true)
 puts
 
 x_inputs = [

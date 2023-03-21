@@ -17,6 +17,13 @@ class Neuron
         @bias.value = @initial_bias
     end
 
+    def set_params(*params)
+        n = 1 + @weights.size
+        raise "Illegal number of parameters: #{params.size} expected #{n}" if n != params.size
+        @bias.value = params[0]
+        (1..params.size).each { |i| @weights[i - 1].value = params[i] }
+    end
+
     attr_reader :weights, :bias
 
     def parameters
@@ -93,18 +100,31 @@ class MLP
         params
     end
 
-    def show_params
-        n = @layers_config[0]
-        puts "Layer 0: (#{n} input#{n > 1 ? "s" : ""})"
-        self.layers.each_with_index do |layer, i|
-            n = layer.neurons.size
-            puts "Layer #{i + 1}: (#{n} neuron#{n > 1 ? "s" : ""})"
-            layer.neurons.each_with_index do |neuron, ii|
-                n = neuron.weights.size
-                puts "\tNeuron #{ii + 1}: (#{n} weight#{n > 1 ? "s" : ""})"
-                puts "\t\tBias: #{neuron.bias.value}"
-                w = neuron.weights.map { |v| v.value }.join(", ")
-                puts "\t\tWeights: #{w}"
+    def show_params(in_words = false)
+        if in_words
+            n = @layers_config[0]
+            puts "Layer 0: (#{n} input#{n > 1 ? "s" : ""})"
+            self.layers.each_with_index do |layer, i|
+                n = layer.neurons.size
+                puts "Layer #{i + 1}: (#{n} neuron#{n > 1 ? "s" : ""})"
+                layer.neurons.each_with_index do |neuron, ii|
+                    n = neuron.weights.size
+                    puts "\tNeuron #{ii + 1}: (#{n} weight#{n > 1 ? "s" : ""})"
+                    puts "\t\tBias: #{neuron.bias.value}"
+                    w = neuron.weights.map { |v| v.value }.join(", ")
+                    puts "\t\tWeights: #{w}"
+                end
+            end
+        else
+            n = @layers_config[0]
+            self.layers.each_with_index do |layer, i|
+                n = layer.neurons.size
+                puts "["
+                layer.neurons.each_with_index do |neuron, ii|
+                    w = neuron.weights.map { |v| v.value }.join(", ")
+                    puts "\t[ #{neuron.bias.value}, #{w} #{ii == layer.neurons.size - 1 ? ']' : '],'}"
+                end
+                puts i == self.layers.size - 1 ? "]" : "],"
             end
         end
         nil
