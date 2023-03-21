@@ -8,6 +8,10 @@ class Neuron
     end
 
     attr_reader :weights, :bias
+
+    def parameters
+        self.weights + [self.bias]
+    end
     
     def calc(inputs)
         # xw + b
@@ -28,6 +32,12 @@ class Layer
     end
 
     attr_reader :neurons
+
+    def parameters
+        params = []
+        self.neurons.each { |n| params += n.parameters }
+        params
+    end
 
     def calc(inputs)
         outs = []
@@ -51,25 +61,46 @@ class MLP
 
     attr_reader :number_of_layers, :layers
 
+    def parameters
+        params = []
+        self.layers.each { |layer| params += layer.parameters }
+        params
+    end
+
     def calc(inputs)
         out = inputs
         self.layers.each do |layer|
             out = layer.calc(out) # chain the results forward, layer by layer
         end
-        out
+        out.size == 1 ? out[0] : out # for convenience
     end
     
 end
 
 nn = MLP.new(3, 4, 4, 1)
 
-xs = [
+x_inputs = [
     [2.0, 3.0, -1.0],
     [3.0, -1.0, 0.5],
     [0.5, 1.0, 1.0],
     [1.0, 1.0, -1.0]
 ]
-ys = [1.0, -1.0, -1.0, 1.0] # desired
-ypred = xs.map { |x| nn.calc(x) }
+y_expected = [1.0, -1.0, -1.0, 1.0] # desired
 
-puts ypred
+(1..20).each do |pass| 
+
+    # forward pass
+    y_calculated = x_inputs.map { |x| nn.calc(x) }
+
+    # loss function
+    loss = 0.0
+    y_expected.each_index { |i| loss += (y_calculated[i] - y_expected[i]) ** 2 }
+
+    # backward pass
+    loss.backward
+
+    # improve
+    nn.parameters.each { |p| p.value += -0.01 * p.grad }
+
+    puts "Pass #{pass} => Loss: #{loss.value}"
+end
