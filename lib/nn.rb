@@ -3,8 +3,14 @@ require_relative "value.rb"
 class Neuron
 
     def initialize(number_of_inputs)
-        @weights = Array.new(number_of_inputs) { Value.new(rand(-1.0..1.0)) }
-        @bias = Value.new(rand(-1.0..1.0)) # bias is only one per neuron
+        @initial_weights = Array.new(number_of_inputs) { rand(-1.0..1.0) }
+        @initial_bias = rand(-1.0..1.0)
+        reset_params
+    end
+
+    private def reset_params
+        @weights = @initial_weights.map { |w| Value.new(w) }
+        @bias = Value.new(@initial_bias)
     end
 
     attr_reader :weights, :bias
@@ -121,3 +127,5 @@ decayRate = 0
 
     break if loss.value == 0
 end
+
+# pretty print parameters (per layer, per neuron, etc)
