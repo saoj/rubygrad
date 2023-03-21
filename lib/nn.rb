@@ -91,7 +91,7 @@ x_inputs = [
 ]
 y_expected = [1.0, -1.0, -1.0, 1.0] # desired
 
-passes = 100
+passes = 10
 passes_format = "%#{passes.digits.length}d"
 loss_precision = 10
 loss_format = "%.#{loss_precision}f"
