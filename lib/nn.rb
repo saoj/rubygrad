@@ -116,7 +116,7 @@ loss_format = "%.#{loss_precision}f"
 initial_learning_rate = 0.5
 decayRate = 0
 
-(0..passes).each do |pass| 
+(0...passes).each do |pass| 
 
     # forward pass
     y_calculated = x_inputs.map { |x| nn.calc(x) }
@@ -135,9 +135,10 @@ decayRate = 0
     # improve
     nn.parameters.each { |p| p.value -= learning_rate * p.grad }
 
-    puts "Pass #{passes_format % pass} => Learning rate: #{"%.10f" % learning_rate} => Loss: #{loss_format % loss.value}"
+    puts "Pass #{passes_format % (pass + 1)} => Learning rate: #{"%.10f" % learning_rate} => Loss: #{loss_format % loss.value}"
 
-    break if loss.value == 0
+    break if loss.value == 0 # for fun just in case
 end
 
 # pretty print parameters (per layer, per neuron, etc)
+# allo different activation functions through enumeration
