@@ -92,6 +92,8 @@ class MLP
     end
 
     def show_params
+        n = @layers_config[0]
+        puts "Layer 0: (#{n} input#{n > 1 ? "s" : ""})"
         self.layers.each_with_index do |layer, i|
             n = layer.neurons.size
             puts "Layer #{i + 1}: (#{n} neuron#{n > 1 ? "s" : ""})"
@@ -103,6 +105,7 @@ class MLP
                 puts "\t\tWeights: #{w}"
             end
         end
+        nil
     end
 
     def reset_params
