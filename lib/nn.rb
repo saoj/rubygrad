@@ -67,6 +67,10 @@ class MLP
         params
     end
 
+    def zero_grad
+        self.parameters.each { |p| p.grad = 0.0 }
+    end
+
     def calc(inputs)
         out = inputs
         self.layers.each do |layer|
@@ -87,7 +91,14 @@ x_inputs = [
 ]
 y_expected = [1.0, -1.0, -1.0, 1.0] # desired
 
-(1..20).each do |pass| 
+passes = 100
+passes_format = "%#{passes.digits.length}d"
+loss_precision = 10
+loss_format = "%.#{loss_precision}f"
+initial_learning_rate = 0.5
+decayRate = 0
+
+(0..passes).each do |pass| 
 
     # forward pass
     y_calculated = x_inputs.map { |x| nn.calc(x) }
@@ -97,10 +108,16 @@ y_expected = [1.0, -1.0, -1.0, 1.0] # desired
     y_expected.each_index { |i| loss += (y_calculated[i] - y_expected[i]) ** 2 }
 
     # backward pass
+    nn.zero_grad
     loss.backward
 
-    # improve
-    nn.parameters.each { |p| p.value += -0.01 * p.grad }
+    # learning rate (with decaying)
+    learning_rate = (1.0 / (1.0 + decayRate * pass)) * initial_learning_rate
 
-    puts "Pass #{pass} => Loss: #{loss.value}"
+    # improve
+    nn.parameters.each { |p| p.value -= learning_rate * p.grad }
+
+    puts "Pass #{passes_format % pass} => Learning rate: #{"%.10f" % learning_rate} => Loss: #{loss_format % loss.value}"
+
+    break if loss.value == 0
 end
