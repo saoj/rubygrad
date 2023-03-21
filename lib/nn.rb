@@ -41,7 +41,7 @@ end
 
 class MLP 
     
-    def initialize(layer_config)
+    def initialize(*layer_config)
         number_of_layers = layer_config.size
         @layers = Array.new(number_of_layers - 1) # input layer is not really a layer object
         (number_of_layers - 1).times do |i|
@@ -62,5 +62,5 @@ class MLP
 end
 
 x = [2.0, 3.0, -1.0]
-nn = MLP.new([3, 4, 4, 1])
+nn = MLP.new(3, 4, 4, 1)
 puts nn.calc(x).inspect
