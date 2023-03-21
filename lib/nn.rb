@@ -60,7 +60,6 @@ class Layer
         end
         outs
     end
-
 end
 
 class MLP 
@@ -81,6 +80,20 @@ class MLP
         params
     end
 
+    def show_params
+        self.layers.each_with_index do |layer, i|
+            n = layer.neurons.size
+            puts "Layer #{i + 1}: (#{n} neuron#{n > 1 ? "s" : ""})"
+            layer.neurons.each_with_index do |neuron, ii|
+                n = neuron.weights.size
+                puts "\tNeuron #{ii + 1}: (#{n} weight#{n > 1 ? "s" : ""})"
+                puts "\t\tBias: #{neuron.bias.value}"
+                w = neuron.weights.map { |v| v.value }.join(", ")
+                puts "\t\tWeights: #{w}"
+            end
+        end
+    end
+
     def reset_params
         self.layers.each { |layer| layer.reset_params }
     end
@@ -96,7 +109,6 @@ class MLP
         end
         out.size == 1 ? out[0] : out # for convenience
     end
-    
 end
 
 nn = MLP.new(3, 4, 4, 1)
@@ -140,5 +152,9 @@ decayRate = 0
     break if loss.value == 0 # for fun just in case
 end
 
+puts
+
+nn.show_params
+
 # pretty print parameters (per layer, per neuron, etc)
-# allo different activation functions through enumeration
+# allow different activation functions through enumeration
