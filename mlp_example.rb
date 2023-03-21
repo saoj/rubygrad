@@ -2,6 +2,9 @@ require_relative 'lib/nn.rb'
 
 nn = MLP.new(3, 4, 4, 1)
 
+nn.show_params
+puts
+
 x_inputs = [
     [2.0, 3.0, -1.0],
     [3.0, -1.0, 0.5],
@@ -14,8 +17,7 @@ passes = 200
 passes_format = "%#{passes.digits.length}d"
 loss_precision = 10
 loss_format = "%.#{loss_precision}f"
-initial_learning_rate = 0.2
-decayRate = 0
+learning_rate = 0.2
 
 (0...passes).each do |pass| 
 
@@ -30,15 +32,12 @@ decayRate = 0
     nn.zero_grad
     loss.backward
 
-    # learning rate (with decaying)
-    learning_rate = (1.0 / (1.0 + decayRate * pass)) * initial_learning_rate
-
     # improve
     nn.parameters.each { |p| p.value -= learning_rate * p.grad }
 
     puts "Pass #{passes_format % (pass + 1)} => Learning rate: #{"%.10f" % learning_rate} => Loss: #{loss_format % loss.value}" if (pass + 1) % 20 == 0 or pass == 0
 
-    break if loss.value == 0 # for fun just in case
+    break if loss.value == 0 # just for fun just in case
 end
 
 y_calculated = x_inputs.map { |x| nn.calc(x, :tanh) }

@@ -35,6 +35,8 @@ class Neuron
             sum.tanh
         elsif activation == :relu
             sum.relu
+        elsif activation == :sigmoid
+            sum.sigmoid
         else
             raise "Unsupported activation function: #{activation}"
         end

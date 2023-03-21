@@ -48,22 +48,34 @@ class Value
     end
 
     def tanh
-        t = (Math.exp(2 * self.value) - 1) / (Math.exp(2 * self.value) + 1)
+        t = (Math.exp(2.0 * self.value) - 1.0) / (Math.exp(2.0 * self.value) + 1.0)
         out = Value.new(t, 'tanh', [self])
 
         out.calc_gradient = lambda do
-            self.grad += (1 - t ** 2) * out.grad
+            self.grad += (1.0 - t ** 2.0) * out.grad
+        end
+
+        return out
+    end
+
+    def sigmoid
+        e = Math.exp(-1.0 * self.value)
+        t = 1.0 / (1.0 + e)
+        out = Value.new(t, 'sigmoid', [self])
+        
+        out.calc_gradient = lambda do
+            self.grad += t * (1.0 - t) * out.grad
         end
 
         return out
     end
 
     def relu
-        n = self.value < 0 ? 0 : self.value
+        n = self.value < 0 ? 0.0 : self.value
         out = Value.new(n, 'ReLU', [self])
 
         out.calc_gradient = lambda do
-            self.grad += (out.value > 0 ? 1 : 0) * out.grad
+            self.grad += (out.value > 0 ? 1.0 : 0.0) * out.grad
         end
 
         return out
