@@ -23,7 +23,7 @@ class Neuron
         self.weights + [self.bias]
     end
     
-    def calc(inputs)
+    def calc(inputs, activation)
         # xw + b
         n = self.weights.size
         raise "Wrong number of inputs! #{inputs.size} expected #{n}" unless n == inputs.size
@@ -31,7 +31,13 @@ class Neuron
         n.times do |index|
             sum += self.weights[index] * inputs[index]
         end
-        sum.tanh
+        if activation == :tanh
+            sum.tanh
+        elsif activation == :relu
+            sum.relu
+        else
+            raise "Unsupported activation function: #{activation}"
+        end
     end
 end
 
@@ -53,10 +59,10 @@ class Layer
         self.neurons.each { |n| n.reset_params }
     end
 
-    def calc(inputs)
+    def calc(inputs, activation)
         outs = []
         self.neurons.each do |neuron|
-            outs << neuron.calc(inputs)
+            outs << neuron.calc(inputs, activation)
         end
         outs
     end
@@ -102,10 +108,10 @@ class MLP
         self.parameters.each { |p| p.grad = 0.0 }
     end
 
-    def calc(inputs)
+    def calc(inputs, activation)
         out = inputs
         self.layers.each do |layer|
-            out = layer.calc(out) # chain the results forward, layer by layer
+            out = layer.calc(out, activation) # chain the results forward, layer by layer
         end
         out.size == 1 ? out[0] : out # for convenience
     end
@@ -131,7 +137,7 @@ decayRate = 0
 (0...passes).each do |pass| 
 
     # forward pass
-    y_calculated = x_inputs.map { |x| nn.calc(x) }
+    y_calculated = x_inputs.map { |x| nn.calc(x, :tanh) }
 
     # loss function
     loss = 0.0
@@ -156,5 +162,3 @@ puts
 
 nn.show_params
 
-# pretty print parameters (per layer, per neuron, etc)
-# allow different activation functions through enumeration
