@@ -1,4 +1,4 @@
-require_relative 'lib/nn.rb'
+require 'rubygrad'
 
 nn = MLP.new(3, 4, 4, 1)
 
