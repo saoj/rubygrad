@@ -70,15 +70,20 @@ end
 
 class MLP 
     
-    def initialize(*layer_config)
-        number_of_layers = layer_config.size
+    def initialize(*layers_config)
+        number_of_layers = layers_config.size
         @layers = Array.new(number_of_layers - 1) # input layer is not really a layer object
         (number_of_layers - 1).times do |i|
-            @layers[i] = Layer.new(layer_config[i], layer_config[i + 1])
+            @layers[i] = Layer.new(layers_config[i], layers_config[i + 1])
         end
+        @layers_config = layers_config
     end
 
     attr_reader :number_of_layers, :layers
+
+    def inspect
+        "MLP(#{@layers_config.join(", ")})"
+    end
 
     def parameters
         params = []
@@ -118,6 +123,8 @@ class MLP
 end
 
 nn = MLP.new(3, 4, 4, 1)
+
+puts nn.inspect
 
 x_inputs = [
     [2.0, 3.0, -1.0],
