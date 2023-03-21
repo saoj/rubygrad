@@ -5,12 +5,16 @@ class Neuron
     def initialize(number_of_inputs)
         @initial_weights = Array.new(number_of_inputs) { rand(-1.0..1.0) }
         @initial_bias = rand(-1.0..1.0)
-        reset_params
-    end
 
-    private def reset_params
         @weights = @initial_weights.map { |w| Value.new(w) }
         @bias = Value.new(@initial_bias)
+    end
+
+    def reset_params
+        @initial_weights.each_with_index do |w,i|
+            @weights[i].value = w
+        end
+        @bias.value = @initial_bias
     end
 
     attr_reader :weights, :bias
@@ -45,6 +49,10 @@ class Layer
         params
     end
 
+    def reset_params
+        self.neurons.each { |n| n.reset_params }
+    end
+
     def calc(inputs)
         outs = []
         self.neurons.each do |neuron|
@@ -71,6 +79,10 @@ class MLP
         params = []
         self.layers.each { |layer| params += layer.parameters }
         params
+    end
+
+    def reset_params
+        self.layers.each { |layer| layer.reset_params }
     end
 
     def zero_grad
