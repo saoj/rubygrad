@@ -17,11 +17,11 @@ class Neuron
         @bias.value = @initial_bias
     end
 
-    def set_params(*params)
+    def set_params(params)
         n = 1 + @weights.size
         raise "Illegal number of parameters: #{params.size} expected #{n}" if n != params.size
         @bias.value = params[0]
-        (1..params.size).each { |i| @weights[i - 1].value = params[i] }
+        (1...params.size).each { |i| @weights[i - 1].value = params[i] }
     end
 
     attr_reader :weights, :bias
@@ -132,6 +132,14 @@ class MLP
 
     def reset_params
         self.layers.each { |layer| layer.reset_params }
+    end
+
+    def set_params(params)
+        params.each_with_index do |layer, li|
+            layer.each_with_index do |neuron, ni|
+                self.layers[li].neurons[ni].set_params(neuron)
+            end
+        end
     end
 
     def zero_grad
