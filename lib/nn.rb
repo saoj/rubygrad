@@ -17,7 +17,7 @@ class Neuron
         n.times do |index|
             sum += self.weights[index] * inputs[index]
         end
-        sum
+        sum.tanh
     end
 end
 
@@ -72,4 +72,4 @@ xs = [
 ys = [1.0, -1.0, -1.0, 1.0] # desired
 ypred = xs.map { |x| nn.calc(x) }
 
-puts ypred.inspect
+puts ypred
