@@ -2,12 +2,14 @@ require_relative "value.rb"
 
 class Neuron
 
-    def initialize(number_of_inputs)
+    def initialize(number_of_inputs, activation_function)
         @initial_weights = Array.new(number_of_inputs) { rand(-1.0..1.0) }
         @initial_bias = rand(-1.0..1.0)
 
         @weights = @initial_weights.map { |w| Value.new(w) }
         @bias = Value.new(@initial_bias)
+
+        @activation_function = activation_function
     end
 
     def reset_params
@@ -30,7 +32,7 @@ class Neuron
         self.weights + [self.bias]
     end
     
-    def calc(inputs, activation)
+    def calc(inputs)
         # xw + b
         n = self.weights.size
         raise "Wrong number of inputs! #{inputs.size} expected #{n}" unless n == inputs.size
@@ -38,25 +40,26 @@ class Neuron
         n.times do |index|
             sum += self.weights[index] * inputs[index]
         end
-        if activation == :tanh
+        if @activation_function == :tanh
             sum.tanh
-        elsif activation == :relu
+        elsif @activation_function == :relu
             sum.relu
-        elsif activation == :sigmoid
+        elsif @activation_function == :sigmoid
             sum.sigmoid
         else
-            raise "Unsupported activation function: #{activation}"
+            raise "Unsupported activation function: #{activation_function}"
         end
     end
 end
 
 class Layer
 
-    def initialize(number_of_inputs, number_of_outputs)
-        @neurons = Array.new(number_of_outputs) { Neuron.new(number_of_inputs) }
+    def initialize(number_of_inputs, number_of_outputs, activation_function)
+        @neurons = Array.new(number_of_outputs) { Neuron.new(number_of_inputs, activation_function) }
+        @activation_function = activation_function
     end
 
-    attr_reader :neurons
+    attr_reader :neurons, :activation_function
 
     def parameters
         params = []
@@ -68,10 +71,10 @@ class Layer
         self.neurons.each { |n| n.reset_params }
     end
 
-    def calc(inputs, activation)
+    def calc(inputs)
         outs = []
         self.neurons.each do |neuron|
-            outs << neuron.calc(inputs, activation)
+            outs << neuron.calc(inputs)
         end
         outs
     end
@@ -80,18 +83,52 @@ end
 class MLP 
     
     def initialize(*layers_config)
-        number_of_layers = layers_config.size
+
+        number_of_layers = layers_config.size - 1 # last param is the activation function
+
+        act = layers_config.last
+
+        if !act.is_a?(Symbol) and !act.is_a?(Array)
+            raise "Activation function must be passed as the last parameter: #{act.class} expected Symbol or Array of Symbols" 
+        end
+
+        single_activation_function = nil
+
+        if act.is_a?(Symbol)
+
+            single_activation_function = act
+
+        else # is Array
+
+            if not act.all? { |item| item.is_a?(Symbol) }
+                raise "Array with activation functions must contain symbols: #{act}"
+            end
+
+            if act.size == 1
+                single_activation_function = act.first
+            elsif act.size != number_of_layers - 1
+                raise "Array size does not match number of layers with activation functions: #{act.size} expected #{number_of_layers - 1}"
+            end
+        end
+        
         @layers = Array.new(number_of_layers - 1) # input layer is not really a layer object
         (number_of_layers - 1).times do |i|
-            @layers[i] = Layer.new(layers_config[i], layers_config[i + 1])
+            @layers[i] = Layer.new(layers_config[i], layers_config[i + 1], single_activation_function.nil? ? act[i] : single_activation_function)
         end
+
         @layers_config = layers_config
     end
 
     attr_reader :layers
 
     def inspect
-        "MLP(#{@layers_config.join(", ")})"
+        lay = @layers_config[0..-2].join(", ") # slice to remove last element
+        act = @layers_config.last.inspect
+        "MLP(#{lay}, #{act})"
+    end
+
+    def to_s
+        inspect
     end
 
     def parameters
@@ -102,11 +139,11 @@ class MLP
 
     def show_params(in_words = false)
         if in_words
-            n = @layers_config[0]
+            n = @layers_config.first
             puts "Layer 0: (#{n} input#{n > 1 ? "s" : ""})"
             self.layers.each_with_index do |layer, i|
                 n = layer.neurons.size
-                puts "Layer #{i + 1}: (#{n} neuron#{n > 1 ? "s" : ""})"
+                puts "Layer #{i + 1}: (#{n} neuron#{n > 1 ? "s" : ""}, #{layer.activation_function.inspect} activation)"
                 layer.neurons.each_with_index do |neuron, ii|
                     n = neuron.weights.size
                     puts "\tNeuron #{ii + 1}: (#{n} weight#{n > 1 ? "s" : ""})"
@@ -116,7 +153,7 @@ class MLP
                 end
             end
         else
-            n = @layers_config[0]
+            n = @layers_config.first
             self.layers.each_with_index do |layer, i|
                 n = layer.neurons.size
                 puts "["
@@ -146,10 +183,10 @@ class MLP
         self.parameters.each { |p| p.grad = 0.0 }
     end
 
-    def calc(inputs, activation)
+    def calc(inputs)
         out = inputs
         self.layers.each do |layer|
-            out = layer.calc(out, activation) # chain the results forward, layer by layer
+            out = layer.calc(out) # chain the results forward, layer by layer
         end
         out.size == 1 ? out[0] : out # for convenience
     end

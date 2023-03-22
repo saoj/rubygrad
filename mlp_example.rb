@@ -5,7 +5,7 @@ require 'rubygrad'
 # Second Layer (Layer 1) => Hidden Layer => 4 Neurons
 # Third  Layer (Layer 2) => Hidden Layer => 4 Neurons
 # Fourth Layer (Layer 3) => Output Layer => 1 Neuron => 1 Output
-nn = MLP.new(3, 4, 4, 1)
+nn = MLP.new(3, 4, 4, 1, :tanh)
 
 # 4 input samples
 x_inputs = [
@@ -28,7 +28,7 @@ _loss_format = "%.#{_loss_precision}f"
 (0...passes).each do |pass| 
 
     # forward pass (calculate output)
-    y_calculated = x_inputs.map { |x| nn.calc(x, :tanh) }
+    y_calculated = x_inputs.map { |x| nn.calc(x) }
 
     # loss function (check how good the neural net is)
     loss = 0.0
@@ -46,7 +46,7 @@ _loss_format = "%.#{_loss_precision}f"
     break if loss.value == 0 # just for fun and just in case
 end
 
-y_calculated = x_inputs.map { |x| nn.calc(x, :tanh) }
+y_calculated = x_inputs.map { |x| nn.calc(x) }
 puts
 puts "Final NN results:"
 y_calculated.each_with_index { |y_c, i| puts "Output: #{y_c} => Expected: #{y_expected[i]}" }
