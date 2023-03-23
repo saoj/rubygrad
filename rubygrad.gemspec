@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
     s.name        = 'rubygrad'
-    s.version     = '1.2.2'
+    s.version     = '1.2.4'
     s.licenses    = ['MIT']
     s.summary     = "A port of Andrej Karpathy's micrograd to Ruby."
     s.authors     = ["Sergio Oliveira Jr"]
