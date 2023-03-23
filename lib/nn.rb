@@ -50,6 +50,8 @@ class Neuron
             sum.relu
         elsif @activation_function == :sigmoid
             sum.sigmoid
+        elsif @activation_function == :none
+            sum
         else
             raise "Unsupported activation function: #{activation_function}"
         end
