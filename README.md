@@ -110,6 +110,8 @@ Output: 0.9949518028977203 => Expected: 1.0
 nn = MLP.new(3, 4, 4, 1, :tanh)
 # or (equivalent)
 nn = MLP.new(3, 4, 4, 1, [:tanh])
+# or (equivalent)
+nn = MLP.new(3, 4, 4, 1, [:tanh, :tanh, :tanh])
 
 # Layer 0 => That's the input layer, so there is no activation function
 # Layer 1 => sigmoid
@@ -250,4 +252,20 @@ Manually changed to:
 [
 	[ 0.19761021225267417, -0.7834214164087676, 0.43077256716665757, -0.8111682816187338, -0.31730643380838086 ]
 ]
+```
+
+#### Changing the activation functions manually
+```ruby
+nn = MLP.new(3, 4, 4, 1, :sigmoid)
+
+# All layers will be changed to tanh
+nn.set_activation_function(:tanh)
+# or (equivalent)
+nn.set_activation_function([:tanh])
+# or (equivalent)
+nn.set_activation_function([:tanh, :tanh, :tanh])
+
+# Change each of the three layers
+# Remember that the first layer (input layer) does not have any activation function
+nn.set_activation_function([:sigmoid, :sigmoid, :tanh])
 ```
