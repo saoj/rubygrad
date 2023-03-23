@@ -42,10 +42,6 @@ y_expected = [1.0, -1.0, -1.0, 1.0]
 passes = 2000
 learning_rate = 0.2
 
-_loss_precision = 10
-_passes_format = "%#{passes.digits.length}d"
-_loss_format = "%.#{_loss_precision}f"
-
 (0...passes).each do |pass| 
 
     # forward pass (calculate output)
@@ -61,8 +57,9 @@ _loss_format = "%.#{_loss_precision}f"
 
     # improve neural net (update weights and biases)
     nn.parameters.each { |p| p.value -= learning_rate * p.grad }
-
-    puts "Pass #{_passes_format % (pass + 1)} => Learning rate: #{"%.10f" % learning_rate} => Loss: #{_loss_format % loss.value}" if (pass + 1) % 100 == 0 or pass == 0
+    
+    # print some info about our progress from time to time
+    nn.print_pass(learning_rate, loss, pass, passes) if (pass + 1) % 100 == 0 or pass == 0
 
     break if loss.value == 0 # just for fun and just in case
 end
