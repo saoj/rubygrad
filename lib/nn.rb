@@ -212,4 +212,11 @@ class MLP
         end
         out.size == 1 ? out[0] : out # for convenience
     end
+
+    def print_pass(learning_rate, loss, pass, passes, learning_rate_precision = 2, loss_precision = 10)
+        passes_format = "%#{passes.digits.length}d"
+        learning_rate_format = "%.#{learning_rate_precision}f"
+        loss_format = "%.#{loss_precision}f"
+        puts "Pass #{passes_format % (pass + 1)} => Learning rate: #{learning_rate_format % learning_rate} => Loss: #{loss_format % loss.value}"
+    end
 end
