@@ -43,6 +43,7 @@ learning_rate = 0.2
     # improve neural net (update weights and biases)
     nn.parameters.each { |p| p.value -= learning_rate * p.grad }
 
+    # print some info about our progress from time to time
     nn.print_pass(learning_rate, loss, pass, passes) if (pass + 1) % 100 == 0 or pass == 0
 
     break if loss.value == 0 # just for fun and just in case
