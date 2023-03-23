@@ -72,27 +72,27 @@ y_calculated.each_with_index { |y_c, i| puts "Output: #{y_c} => Expected: #{y_ex
 
 #### Output
 ```
-Pass    1 => Learning rate: 0.2000000000 => Loss: 6.4414947529
-Pass  100 => Learning rate: 0.2000000000 => Loss: 0.0014086315
-Pass  200 => Learning rate: 0.2000000000 => Loss: 0.0007669303
-Pass  300 => Learning rate: 0.2000000000 => Loss: 0.0005244376
-Pass  400 => Learning rate: 0.2000000000 => Loss: 0.0003974497
-Pass  500 => Learning rate: 0.2000000000 => Loss: 0.0003194754
-Pass  600 => Learning rate: 0.2000000000 => Loss: 0.0002667991
-Pass  700 => Learning rate: 0.2000000000 => Loss: 0.0002288631
-Pass  800 => Learning rate: 0.2000000000 => Loss: 0.0002002596
-Pass  900 => Learning rate: 0.2000000000 => Loss: 0.0001779336
-Pass 1000 => Learning rate: 0.2000000000 => Loss: 0.0001600304
-Pass 1100 => Learning rate: 0.2000000000 => Loss: 0.0001453591
-Pass 1200 => Learning rate: 0.2000000000 => Loss: 0.0001331204
-Pass 1300 => Learning rate: 0.2000000000 => Loss: 0.0001227580
-Pass 1400 => Learning rate: 0.2000000000 => Loss: 0.0001138729
-Pass 1500 => Learning rate: 0.2000000000 => Loss: 0.0001061715
-Pass 1600 => Learning rate: 0.2000000000 => Loss: 0.0000994331
-Pass 1700 => Learning rate: 0.2000000000 => Loss: 0.0000934883
-Pass 1800 => Learning rate: 0.2000000000 => Loss: 0.0000882054
-Pass 1900 => Learning rate: 0.2000000000 => Loss: 0.0000834802
-Pass 2000 => Learning rate: 0.2000000000 => Loss: 0.0000792291
+Pass    1 => Learning rate: 0.20 => Loss: 6.4414947529
+Pass  100 => Learning rate: 0.20 => Loss: 0.0014086315
+Pass  200 => Learning rate: 0.20 => Loss: 0.0007669303
+Pass  300 => Learning rate: 0.20 => Loss: 0.0005244376
+Pass  400 => Learning rate: 0.20 => Loss: 0.0003974497
+Pass  500 => Learning rate: 0.20 => Loss: 0.0003194754
+Pass  600 => Learning rate: 0.20 => Loss: 0.0002667991
+Pass  700 => Learning rate: 0.20 => Loss: 0.0002288631
+Pass  800 => Learning rate: 0.20 => Loss: 0.0002002596
+Pass  900 => Learning rate: 0.20 => Loss: 0.0001779336
+Pass 1000 => Learning rate: 0.20 => Loss: 0.0001600304
+Pass 1100 => Learning rate: 0.20 => Loss: 0.0001453591
+Pass 1200 => Learning rate: 0.20 => Loss: 0.0001331204
+Pass 1300 => Learning rate: 0.20 => Loss: 0.0001227580
+Pass 1400 => Learning rate: 0.20 => Loss: 0.0001138729
+Pass 1500 => Learning rate: 0.20 => Loss: 0.0001061715
+Pass 1600 => Learning rate: 0.20 => Loss: 0.0000994331
+Pass 1700 => Learning rate: 0.20 => Loss: 0.0000934883
+Pass 1800 => Learning rate: 0.20 => Loss: 0.0000882054
+Pass 1900 => Learning rate: 0.20 => Loss: 0.0000834802
+Pass 2000 => Learning rate: 0.20 => Loss: 0.0000792291
 
 Final NN results:
 Output: 0.9946071757394565 => Expected: 1.0
