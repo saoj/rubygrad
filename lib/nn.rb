@@ -35,6 +35,10 @@ class Neuron
     def parameters
         self.weights + [self.bias]
     end
+
+    def param_count
+        self.weights.size + 1
+    end
     
     def calc(inputs)
         # xw + b
@@ -71,6 +75,12 @@ class Layer
         params = []
         self.neurons.each { |n| params += n.parameters }
         params
+    end
+
+    def param_count
+        count = 0
+        self.neurons.each { |n| count += n.param_count }
+        count
     end
 
     def reset_params
@@ -152,6 +162,12 @@ class MLP
         params = []
         self.layers.each { |layer| params += layer.parameters }
         params
+    end
+
+    def param_count
+        total = 0
+        self.layers.each { |layer| total += layer.param_count }
+        total
     end
 
     def show_params(in_words = false)

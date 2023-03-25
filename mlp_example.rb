@@ -1,5 +1,4 @@
-require 'rubygrad'
-#require_relative 'lib/nn.rb'
+require_relative 'lib/nn.rb'
 
 # Build a Machine Learning Perceptron with 4 layers
 # First  Layer (Layer 0) => Input Layer  => 3 Neurons => 3 Inputs
@@ -7,7 +6,9 @@ require 'rubygrad'
 # Third  Layer (Layer 2) => Hidden Layer => 4 Neurons
 # Fourth Layer (Layer 3) => Output Layer => 1 Neuron => 1 Output
 nn = MLP.new(3, 4, 4, 1, :tanh)
-
+puts
+puts "#{nn} => #{nn.param_count}"
+puts
 nn.show_params
 puts
 nn.show_params(in_words = true)
