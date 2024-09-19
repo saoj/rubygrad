@@ -7,7 +7,7 @@ require_relative 'lib/nn.rb'
 # Fourth Layer (Layer 3) => Output Layer => 1 Neuron => 1 Output
 nn = MLP.new(3, 4, 4, 1, :tanh)
 puts
-puts "#{nn} => #{nn.param_count}"
+puts "#{nn} => #{nn.param_count} parameters"
 puts
 nn.show_params
 puts
@@ -34,7 +34,7 @@ learning_rate = 0.2
     y_calculated = x_inputs.map { |x| nn.calc(x) }
 
     # loss function (check how good the neural net is)
-    loss = 0.0
+    loss = Value.new(0.0)
     y_expected.each_index { |i| loss += (y_calculated[i] - y_expected[i]) ** 2 }
 
     # backward pass (calculate gradients)
