@@ -48,7 +48,7 @@ learning_rate = 0.2
     y_calculated = x_inputs.map { |x| nn.calc(x) }
 
     # loss function (check how good the neural net is)
-    loss = 0.0
+    loss = Value.new(0.0)
     y_expected.each_index { |i| loss += (y_calculated[i] - y_expected[i]) ** 2 }
 
     # backward pass (calculate gradients)
