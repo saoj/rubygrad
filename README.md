@@ -6,6 +6,7 @@ A port of Andrej Karpathy's [micrograd](https://github.com/karpathy/micrograd) t
 - Learn Ruby and compare it with Python
 - Evolve the library to add more features not necessarily present in [micrograd](https://github.com/karpathy/micrograd) for example the ability to specify a different activation function for each layer
 - (_Work in Progress_) Use it to build a perceptron to recognize handwritten digits (see my other project [mnist-ready](https://github.com/saoj/mnist-ready))
+- Enjoy!
 
 ## Installation
 
